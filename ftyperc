@@ -958,6 +958,11 @@
 -autoindent
 -tab 4
 
+*.escript
+-syntax erlang
+-autoindent
+-tab 4
+
  Sieve (ManageSieve)
 *.sieve
 -syntax sieve

@@ -1,5 +1,5 @@
 # JOE syntax highlight file for INI files
-# License: GPL
+# License: GPL v2 or any later version
 # by Christian Nicolai (http://mycrobase.de)
 # contributions by Todd Lewis (https://github.com/utoddl)
 
@@ -9,9 +9,9 @@
 =Escape		cyan    bold
 =Bad		red     bold
 =Key
-=Separator	        bold
-=Section	white   bold bg_MAGENTA
-=SectionBracket	white        bg_MAGENTA
+=Separator	bold
+=Section	bold magenta
+=SectionBracket	bold magenta
 
 :line_start Idle
 	*		key		noeat mark
@@ -101,4 +101,3 @@
 	*		value_esc_bad	noeat recolormark
 	"0-9a-fA-F"	value_esc_end	      recolormark
 	"\n"		unexpected_end	noeat recolormark
-
