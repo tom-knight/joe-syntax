@@ -2,9 +2,6 @@
 
 namespace App\Http\Controllers;
 
-// namespace can't contian keywords?
-
-
 // Variable definitions
 $var = 'Bob';
 $Var = 'Joe';
@@ -12,7 +9,12 @@ echo "$var, $Var";      // outputs "Bob, Joe"
 
 $4site = 'not yet';     // invalid; starts with a number
 $_4site = 'not yet';    // valid; starts with an underscore
-$tÃ¤yte = 'mansikka';    // valid; 'Ã¤' is (Extended) ASCII 228.
+
+//  joe doesn't have extended ascii characters, so you need to set the file encoding to something like iso-8859-1 to see this correctly.
+
+$täyte = 'mansikka';    // valid; 'ä' is (Extended) ASCII 228.
+$t€ÿyte = 'mansikka';    // valid; '€' is (Extended) ASCII 128 (\x80) and 'ÿ' is (Extended) ASCII 255 (\xff).
+
 
 // Variable variables
 
@@ -95,6 +97,33 @@ $a = 0o123; // octal number (as of PHP 8.1.0)
 $a = 0x1A; // hexadecimal number (equivalent to 26 decimal)
 $a = 0b11111111; // binary number (equivalent to 255 decimal)
 $a = 1_234_567; // decimal number (as of PHP 7.4.0)
+$a = 012_3; // octal number (as of PHP 7.4.0)
+$a = 0O12_3; // octal number (as of PHP 7.4.0)
+$a = 0X1_A; // hexadecimal number (as of PHP 7.4.0)
+$a = 0B1111_1111; // binary number (as of PHP 7.4.0)
+
+// bad numbers
+
+$a = 12a34; // bad decimal number - has letter
+$a = 1_23a4_567; // bad decimal number - has letter
+
+$a = 01a23; // bad octal number - has letter
+$a = 0o1a23; // bad octal number - has letter
+$a = 0o183; // bad octal number - has number > 7
+$a = 0183; // bad octal number - has number > 7
+$a = 0o_123; // bad octal number - has underscore in first post letter postition
+$a = 0_183; // bad octal number - has underscore in first post letter postition
+
+$a = 0x1G; // bad hexadecimal number - Contains char > F
+$a = 0x_1A; // bad hexadecimal number - has underscore in first post letter postition
+
+$a = 0b11121111; // bad binary number - has number > 1
+$a = 0b_11111111; // bad binary number - has underscore in first post letter postition
+
+
+$a = 1o123; // bad octal number - doesn't start with 0
+$a = 1x1A; // bad hexadecimal number - doesn't start with 0
+$a = 1b11111111; // bad binary number - doesn't start with 0
 
 /*
  Formally, the structure for int literals is as of PHP 7.4.0 (previously, underscores have not been allowed):
@@ -116,10 +145,21 @@ integer     : decimal
 
 // Floating point numbers
 
-$a = 1.234; 
-$b = 1.2e3; 
+$a = 1.234;
+$b = 1.2e3;
+$b = 1.2e-3;
+$b = 1.2e+3;
+$c = 7E10;
 $c = 7E-10;
+$c = 7E+10;
 $d = 1_234.567; // as of PHP 7.4.0
+
+// Bad floats
+
+$a = 1.2a34; // has non 'e' letter
+$b = 1.2e3a08; // has letter in exponent part
+$b = 1.2e_3a08; // has underscore straight after 'e'
+
 
 /*
  Formally as of PHP 7.4.0 (previously, underscores have not been allowed):
@@ -186,7 +226,7 @@ Escaped characters Sequence 	Meaning
 \" 	double-quote
 \[0-7]{1,3} 	the sequence of characters matching the regular expression is a character in octal notation, which silently overflows to fit in a byte (e.g. "\400" === "\000")
 \x[0-9A-Fa-f]{1,2} 	the sequence of characters matching the regular expression is a character in hexadecimal notation
-\u{[0-9A-Fa-f]+} 	the sequence of characters matching the regular expression is a Unicode codepoint, which will be output to the string as that codepoint's UTF-8 representation 
+\u{[0-9A-Fa-f]+} 	the sequence of characters matching the regular expression is a Unicode codepoint, which will be output to the string as that codepoint's UTF-8 representation
 */
 
 echo "linefeed\n";
@@ -328,7 +368,7 @@ FOOBAR;
 
 //  Nowdocs are to single-quoted strings what heredocs are to double-quoted strings. A nowdoc is specified similarly to a heredoc, but no parsing is done inside a nowdoc. The construct is ideal for embedding PHP code or other large blocks of text without the need for escaping. It shares some features in common with the SGML <![CDATA[ ]]> construct, in that it declares a block of text which is not for parsing.
 
-// A nowdoc is identified with the same <<< sequence used for heredocs, but the identifier which follows is enclosed in single quotes, e.g. <<<'EOT'. All the rules for heredoc identifiers also apply to nowdoc identifiers, especially those regarding the appearance of the closing identifier. 
+// A nowdoc is identified with the same <<< sequence used for heredocs, but the identifier which follows is enclosed in single quotes, e.g. <<<'EOT'. All the rules for heredoc identifiers also apply to nowdoc identifiers, especially those regarding the appearance of the closing identifier.
 
 echo <<<'EOD'
 Example of string spanning multiple lines

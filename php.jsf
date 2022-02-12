@@ -66,11 +66,7 @@
 #      * Final class constants
 #    * new functions? https://www.php.net/manual/en/migration81.new-functions.php
 #  * case-insensitivity?
-#  * php variable https://www.php.net/manual/en/language.variables.basics.php - ^[a-zA-Z_\x80-\xff][a-zA-Z0-9_\x80-\xff]*$
-#  * Bad state
 #  * types
-#    * integer literals
-#    * float literals
 #    * strings
 #      * single quotes
 #      * double quotes
@@ -81,6 +77,7 @@
 
 # Define colors
 
+
 =Idle
 =Comment	green
 =Constant	cyan
@@ -89,6 +86,10 @@
 =Keyword	bold
 =Var		red
 =Methods	bold
+# TODO: If we use the same state name as other jsf files (which ones?) it uses those colour definitions and not these.
+#=Bad		inverse bold red
+=Badly		inverse bold red
+
 
 # Call HTML highlighter. It will call the PHP highlighter subroutine in this file.
 
@@ -109,7 +110,8 @@
 	"%"				idle_hash
 	"#"				sh_comment	recolor=-1
 	"/"				slash
-	"0-9"				first_digit	recolor=-1
+	"0"				first_digit	recolor=-1
+	"1-9"				first_number	recolor=-1
 	"'"				string_sq	recolor=-1
 	"\""				string_dq	recolor=-1
 	"\`"				string_bq	recolor=-1
@@ -156,8 +158,16 @@ done
 	*				idle		noeat
 
 :php_var Var
+	*				bad_var		noeat
+	"a-zA-Z_\x80-\xff"		php_var2
+
+:php_var2 Var
 	*				idle		noeat
-	"a-zA-Z_0-9-ÿ"			php_var
+	"a-zA-Z_0-9\x80-\xff"		php_var2
+
+:bad_var Badly
+	*				idle		noeat
+	"a-zA-Z_0-9\x80-\xff"		bad_var
 
 :var_indqstring Var
 	*				string_dq	recolor=-1
@@ -177,7 +187,8 @@ done
 	"%"				idle_hash
 	"#"				sh_comment	recolor=-1
 	"/"				slash
-	"0-9"				first_digit	recolor=-1
+	"0"				first_digit	recolor=-1
+	"1-9"				first_number	recolor=-1
 	"'"				string_sq	recolor=-1
 	"\""				string_dq	recolor=-1
 	"a-zA-Z_"			ident		buffer
@@ -250,40 +261,69 @@ done
 
 :first_digit Constant
 	*				idle		noeat
-	"xX"				hex
+	"xX"				first_hex
+	"oO0-7"				first_octal
+	"bB"				first_binary
+	"eE"				epart
 	"."				float
-	"0"				octal
-	"1-9"				first_number
+	"aAcdCDf-nF-Np-wP-Wy-zY-Z8-9_"	bad_number	noeat
 
-:octal Constant
+:first_binary Constant
 	*				idle		noeat
-	"0-7"				octal
+	"01"				binary
+	"a-zA-Z_2-9"			bad_number	noeat
+
+:binary Constant
+	*				idle		noeat
+	"01_"				binary
+	"a-zA-Z2-9"			bad_number	noeat
+
+:first_hex Constant
+	*				idle		noeat
+	"0-9A-Fa-f"			hex
+	"g-zG-Z_"			bad_number	noeat
 
 :hex Constant
 	*				idle		noeat
-	"0-9A-Fa-f"			hex
+	"0-9A-Fa-f_"			hex
+	"g-zG-Z"			bad_number	noeat
+
+:first_octal Constant
+	*				idle		noeat
+	"0-7"				octal
+	"a-zA-Z_8-9"			bad_number	noeat
+
+:octal Constant
+	*				idle		noeat
+	"0-7_"				octal
+	"a-zA-Z8-9"			bad_number	noeat
 
 :first_number Constant
 	*				idle		noeat
-	"0-9"				first_number
+	"0-9_"				first_number
 	"."				float
+	"eE"				epart
+	"a-df-zA-DF-Z"			bad_number	noeat
 
-:maybe_float Constant
-	*				idle		recolor=-2 noeat
-	"0-9"				float		recolor=-2
+:bad_number Badly
+	*				idle		noeat
+	"a-zA-Z_0-9"			bad_number
 
 :float Constant
 	*				idle		noeat
 	"eE"				epart
-	"0-9"				float
+	"0-9_"				float
+	"a-df-zA-DF-Z"			bad_number	noeat
 
 :epart Constant
 	*				idle		noeat
 	"0-9+\-"			enum
+	"a-zA-Z_"			bad_number	noeat
 
 :enum Constant
 	*				idle		noeat
-	"0-9"				enum
+	"0-9_"				enum
+	"a-zA-Z"			bad_number	noeat
 
 :ident Idle
 	*				idle		noeat strings
@@ -427,8 +467,5 @@ done
 
 :meth Methods
 	*				idle		noeat
-
-:var Var
-	*				mark		noeat
 
 .end
