@@ -2,6 +2,17 @@
 
 namespace App\Http\Controllers;
 
+// TODO comments
+// BUG
+// FIXME
+// HACK
+// NOTE
+// TODO
+// XXX
+// DEBUG
+// SOMETHING_ELSE
+
+
 // Variable definitions
 $var = 'Bob';
 $Var = 'Joe';
@@ -194,6 +205,10 @@ echo 'This will not expand: \n a newline';
 // Outputs: Variables do not $expand $either
 echo 'Variables do not $expand $either';
 
+// only valid escapes in single quotes are \' and \\
+echo 'single\'quote';
+echo 'back\\slash';
+
 // These escape sequences shouldn't be interpreted
 
 echo 'linefeed\n';
@@ -202,7 +217,6 @@ echo 'horizontal\ttab';
 echo 'vertical\vtab';
 echo 'escape\efrom here';
 echo 'form\ffeed';
-echo 'back\\slash';
 echo '\$dollar sign';
 echo 'double\"quote';
 echo 'octal \101';
@@ -213,7 +227,7 @@ echo 'Unicode \u{C4}';
 // Double-quoted
 
 /*
- If the string is enclosed in double-quotes ("), PHP will interpret the following escape sequences for special characters:
+If the string is enclosed in double-quotes ("), PHP will interpret the following escape sequences for special characters:
 Escaped characters Sequence 	Meaning
 \n 	linefeed (LF or 0x0A (10) in ASCII)
 \r 	carriage return (CR or 0x0D (13) in ASCII)
@@ -241,6 +255,10 @@ echo "double\"quote";
 echo "octal \101";
 echo "hex \x0FA";
 echo "Unicode \u{C4}";
+
+// bad escape - will output literally
+
+echo "bad\sescape";
 
 // Heredoc
 

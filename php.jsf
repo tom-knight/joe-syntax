@@ -74,15 +74,20 @@
 #      * nowdoc
 #    * Enumerations?
 #  * common functions
+#  * "TODO" comments
+#  * compare with /usr/share/joe/syntax/php.jsf - e.g. colour definitions
 
 # Define colors
 
 
 =Idle
-=Comment	green
-=Constant	cyan
-=Constant_sq	blue
-=Escape		bold cyan
+=Comment
+=Constant
+=Number		+Constant
+=String		+Constant
+=String_sq	blue
+=StringEscape	+Escape
+=Escape
 =Keyword	bold
 =Var		red
 =Methods	bold
@@ -138,16 +143,16 @@
 	*				inhere_doc	save_s
 	"A-Za-z_0-9"			here_name
 
-:inhere_doc Constant
+:inhere_doc String
 	*				inhere_not_eol
 	"\n"				inhere_doc
 	"A-Za-z_"			inhere_name	buffer
 
-:inhere_not_eol Constant
+:inhere_not_eol String
 	*				inhere_not_eol
 	"\n"				inhere_doc
 
-:inhere_name Constant
+:inhere_name String
 	*				inhere_doc
 	";"				inhere_doc	strings
 	"&"				idle
@@ -230,36 +235,38 @@ done
 	*				line_comment
 	"\n"				idle
 
-:string_sq Constant_sq
+:string_sq String_sq
 	*				string_sq
 	"\'"				idle
 	"\\"				string_sq_esc	recolor=-1
 
-:string_sq_esc Escape
-	*				string_sq
+:string_sq_esc StringEscape
+	*				string_sq	recolor=-2
+	"\\"				string_sq
+	"'"				string_sq
 	"\n"				string_sq	recolor=-2
 
-:string_dq Constant
+:string_dq String
 	*				string_dq
 	"$"				var_indqstring	recolor=-1
 	"\""				idle
 	"\\"				string_dq_esc	recolor=-1
 
-:string_dq_esc Escape
+:string_dq_esc StringEscape
 	*				string_dq
 	"\n"				string_dq	recolor=-2
 
-:string_bq Constant
+:string_bq String
 	*				string_bq
 	"$"				var_inbqstring	recolor=-1
 	"\`"				idle
 	"\\"				string_bq_esc	recolor=-1
 
-:string_bq_esc Escape
+:string_bq_esc StringEscape
 	*				string_bq
 	"\n"				string_bq	recolor=-2
 
-:first_digit Constant
+:first_digit Number
 	*				idle		noeat
 	"xX"				first_hex
 	"oO0-7"				first_octal
@@ -268,37 +275,37 @@ done
 	"."				float
 	"aAcdCDf-nF-Np-wP-Wy-zY-Z8-9_"	bad_number	noeat
 
-:first_binary Constant
+:first_binary Number
 	*				idle		noeat
 	"01"				binary
 	"a-zA-Z_2-9"			bad_number	noeat
 
-:binary Constant
+:binary Number
 	*				idle		noeat
 	"01_"				binary
 	"a-zA-Z2-9"			bad_number	noeat
 
-:first_hex Constant
+:first_hex Number
 	*				idle		noeat
 	"0-9A-Fa-f"			hex
 	"g-zG-Z_"			bad_number	noeat
 
-:hex Constant
+:hex Number
 	*				idle		noeat
 	"0-9A-Fa-f_"			hex
 	"g-zG-Z"			bad_number	noeat
 
-:first_octal Constant
+:first_octal Number
 	*				idle		noeat
 	"0-7"				octal
 	"a-zA-Z_8-9"			bad_number	noeat
 
-:octal Constant
+:octal Number
 	*				idle		noeat
 	"0-7_"				octal
 	"a-zA-Z8-9"			bad_number	noeat
 
-:first_number Constant
+:first_number Number
 	*				idle		noeat
 	"0-9_"				first_number
 	"."				float
@@ -309,18 +316,18 @@ done
 	*				idle		noeat
 	"a-zA-Z_0-9"			bad_number
 
-:float Constant
+:float Number
 	*				idle		noeat
 	"eE"				epart
 	"0-9_"				float
 	"a-df-zA-DF-Z"			bad_number	noeat
 
-:epart Constant
+:epart Number
 	*				idle		noeat
 	"0-9+\-"			enum
 	"a-zA-Z_"			bad_number	noeat
 
-:enum Constant
+:enum Number
 	*				idle		noeat
 	"0-9_"				enum
 	"a-zA-Z"			bad_number	noeat
