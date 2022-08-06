@@ -1,0 +1,63 @@
+# JOE syntax highlight file for Gherkin
+# created by Tom Knight-Markiegi
+# License: GPL v2 or any later version
+
+# TODO: translated keywords?
+# TODO: Doc strings """ or ```
+# TODO: Data tables?
+# TODO: Table cell escaping
+# TODO: tags
+# TODO: *
+# TODO: <> parameters
+
+=Idle
+=Comment
+=Number		+Constant
+=String		+Constant
+=Keyword	bold
+
+:idle Idle
+	*			idle
+	"A-Z*"			maybe_keyword	buffer
+	"\""			string		recolor=-1
+	"0-9"			number		recolor=-1
+	"#"			comment		recolor=-1
+
+:maybe_keyword Idle
+	*			idle		noeat strings
+	"Scenario Outline"	keyword
+	"Scenario Template"	keyword
+	"Feature"		keyword
+	"Rule"			keyword
+	"Example"		keyword
+	"Scenario"		keyword
+	"Given"			keyword
+	"When"			keyword
+	"Then"			keyword
+	"And"			keyword
+	"But"			keyword
+	"Background"		keyword
+	"Examples"		keyword
+	"Scenarios"		keyword
+	"*"			keyword
+	":"			keyword
+	# TODO: keyword strings with spaces don't really work - use this as workaround
+	"Outline"		keyword
+	"Template"		keyword
+done
+	"a-zA-Z"		maybe_keyword
+
+:keyword Keyword
+	*			idle		noeat
+
+:string String
+	*			string
+	"\""			idle
+
+:number Number
+	* 			idle
+	"0-9"			number
+
+:comment Comment
+	* 			comment
+	"\n"			idle
