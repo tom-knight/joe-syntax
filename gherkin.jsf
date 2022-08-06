@@ -4,17 +4,16 @@
 
 # TODO: translated keywords?
 # TODO: Doc strings """ or ```
-# TODO: Data tables?
 # TODO: Table cell escaping
 # TODO: tags
-# TODO: *
-# TODO: <> parameters
 
 =Idle
 =Comment
 =Number		+Constant
 =String		+Constant
 =Keyword	bold
+=Parameter	cyan
+=Table		yellow
 
 :idle Idle
 	*			idle
@@ -22,6 +21,8 @@
 	"\""			string		recolor=-1
 	"0-9"			number		recolor=-1
 	"#"			comment		recolor=-1
+	"<"			parameter	recolor=-1
+	"|"			table		#recolor=-1
 
 :maybe_keyword Idle
 	*			idle		noeat strings
@@ -61,3 +62,11 @@ done
 :comment Comment
 	* 			comment
 	"\n"			idle
+
+:parameter Parameter
+	* 			parameter
+	">"			idle
+
+:table Table
+	* 			table
+	"|\n"			idle		noeat
