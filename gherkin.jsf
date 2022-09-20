@@ -5,7 +5,6 @@
 # TODO: translated keywords?
 # TODO: Doc strings """ or ```
 # TODO: Table cell escaping
-# TODO: tags
 
 =Idle
 =Comment
@@ -14,6 +13,7 @@
 =Keyword	bold
 =Parameter	cyan
 =Table		yellow
+=Tag		magenta
 
 :idle Idle
 	*			idle
@@ -23,6 +23,7 @@
 	"#"			comment		recolor=-1
 	"<"			parameter	recolor=-1
 	"|"			table		#recolor=-1
+	"@"			tag		recolor=-1
 
 :maybe_keyword Idle
 	*			idle		noeat strings
@@ -70,3 +71,7 @@ done
 :table Table
 	* 			table
 	"|\n"			idle		noeat
+
+:tag Tag
+	* 			tag
+	" \n"			idle		recolor=-1
